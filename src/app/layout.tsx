@@ -14,13 +14,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Prefixed at build so links resolve on a GitHub Pages sub-path or at the root.
+const bp = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export const metadata: Metadata = {
   title: "UKH PG Marks",
   description:
     "Track and visualise your UKH postgraduate marks against the handbook progression rules. Works offline; your data stays in your browser.",
-  manifest: "/manifest.webmanifest",
+  manifest: `${bp}/manifest.webmanifest`,
   appleWebApp: { capable: true, title: "UKH Marks", statusBarStyle: "default" },
-  icons: { icon: "/icon.svg", apple: "/icon-180.png" },
+  icons: { icon: `${bp}/icon.svg`, apple: `${bp}/icon-180.png` },
 };
 
 export const viewport: Viewport = {
