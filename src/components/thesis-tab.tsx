@@ -45,7 +45,7 @@ export function ThesisTab() {
                 size={140}
               />
               <p className="text-center text-xs text-muted-foreground">
-                Weighted: Written 30 · Oral 20 · Manuscript 40 · Supervisor 10 (§6).
+                Weighted: Written 30 · Oral 20 · Manuscript 40 · Supervisor 10.
               </p>
             </div>
 
@@ -80,7 +80,7 @@ export function ThesisTab() {
                   {cum.cumulative !== null ? cum.cumulative.toFixed(1) : "—"}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  coursework 66.67% + dissertation 33.33% (§4.2). Fills in once both halves exist.
+                  coursework 66.67% + dissertation 33.33%. Fills in once both halves exist.
                 </p>
               </div>
             </Card>

@@ -42,12 +42,12 @@ export function adviceForTaughtYear(year: TaughtYear, settings: Settings): Advic
 
   if (failed.length) {
     recs.push(
-      `Automatic re-sit (no limit, §5.i) for: ${failed
+      `Automatic re-sit (no limit) for: ${failed
         .map((m) => `${m.name || "Untitled module"} (${effectiveMark(m)})`)
-        .join(", ")}. Re-sits cover the exam areas; coursework marks stay (§7), and a re-sit mark is final even if it is lower (§5.v).`,
+        .join(", ")}. Re-sits cover the exam areas; coursework marks stay, and a re-sit mark is final even if it is lower.`,
     );
     recs.push(
-      "A failed academic year leads to termination — there is no retake in PG (§5.iii) — so prioritise these re-sits.",
+      "A failed academic year leads to termination — there is no retake in PG — so prioritise these re-sits.",
     );
   }
 
@@ -60,7 +60,7 @@ export function adviceForTaughtYear(year: TaughtYear, settings: Settings): Advic
       .slice(0, a.maxResitForAverage);
 
     recs.push(
-      `You passed every module, but your annual average (${fmt(a.average)}) is below ${req}. You may request a re-sit on up to ${a.maxResitForAverage} module${a.maxResitForAverage === 1 ? "" : "s"} (max 50% of modules) to raise it — not automatic; submit the PG Re-sit Request form to ARO (§5.ii).`,
+      `You passed every module, but your annual average (${fmt(a.average)}) is below ${req}. You may request a re-sit on up to ${a.maxResitForAverage} module${a.maxResitForAverage === 1 ? "" : "s"} (max 50% of modules) to raise it — not automatic; submit the PG Re-sit Request form to ARO.`,
     );
     const used = graded.filter((m) => num(m.resit) !== null).length;
     const remaining = Math.max(0, a.maxResitForAverage - used);
@@ -73,7 +73,7 @@ export function adviceForTaughtYear(year: TaughtYear, settings: Settings): Advic
         .join(", ")}.`,
     );
     recs.push(
-      "Caution: a re-sit mark replaces the original even if it is lower (§5.v) — only re-sit where you are confident of improving.",
+      "Caution: a re-sit mark replaces the original even if it is lower — only re-sit where you are confident of improving.",
     );
 
     if (lowest.length) {

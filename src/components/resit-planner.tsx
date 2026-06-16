@@ -72,7 +72,7 @@ export function ResitPlanner() {
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">
         Try hypothetical re-sit marks. Re-sits to raise the average are capped at 50% of modules (max{" "}
-        {result.cap}). A re-sit mark is final even if lower (§5.v).
+        {result.cap}). A re-sit mark is final even if lower.
       </p>
 
       <div className="space-y-2">

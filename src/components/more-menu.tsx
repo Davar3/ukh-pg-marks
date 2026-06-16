@@ -7,6 +7,7 @@ import {
   EllipsisVertical,
   FileText,
   FolderInput,
+  type LucideIcon,
   Moon,
   RotateCcw,
   Share2,
@@ -21,9 +22,7 @@ import { toast } from "sonner";
 import { useMarks } from "@/hooks/use-marks";
 import { downloadReport } from "@/lib/pdf";
 import { encodeShare } from "@/lib/store";
-
-const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -31,38 +30,64 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const HANDBOOK_URL =
   "https://www.ukh.edu.krd/wp-content/uploads/2025/12/Student-Handbook-2025-2026-PG.pdf";
 
 const RULES: string[] = [
-  "Module pass = 60. Below 60 → automatic re-sit, no limit (§5.i).",
-  "Annual average must be ≥ 70 to progress, and every module must be passed (§5).",
-  "Passed all modules but average < 70 → you may re-sit up to 50% of modules to raise it (not automatic; PG Re-sit form to ARO). Still < 70 → year failed (§5.ii).",
-  "Failing a year = termination. There is no retake in PG (§5.iii).",
-  "A re-sit mark is final, even if lower, and is not capped at 60 (§5.v).",
-  "Dissertation pass = 70; thesis = Written 30 + Oral 20 + Manuscript 40 + Supervisor 10 (§6).",
-  "Module marks round at .5; averages are shown unrounded (§4.2).",
-  "Cumulative = coursework 66.67% + dissertation 33.33% (§4.2).",
+  "Module pass = 60. Below 60 → automatic re-sit, no limit.",
+  "Annual average must be ≥ 70 to progress, and every module must be passed.",
+  "Passed all modules but average < 70 → you may re-sit up to 50% of modules to raise it (not automatic; submit the PG Re-sit form to ARO). Still < 70 → the year is failed.",
+  "Failing a year = termination. There is no retake in PG.",
+  "A re-sit mark is final, even if lower, and is not capped at 60.",
+  "Dissertation pass = 70; thesis = Written 30 + Oral 20 + Manuscript 40 + Supervisor 10.",
+  "Module marks round at .5; averages are shown unrounded.",
+  "Cumulative = coursework 66.67% + dissertation 33.33%.",
 ];
+
+function MenuRow({
+  icon: Icon,
+  children,
+  onClick,
+  destructive,
+}: {
+  icon: LucideIcon;
+  children: React.ReactNode;
+  onClick: () => void;
+  destructive?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-medium transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+        destructive && "text-fail-strong hover:bg-fail/10",
+      )}
+    >
+      <Icon className="size-4 shrink-0" />
+      {children}
+    </button>
+  );
+}
 
 export function MoreMenu() {
   const { theme, setTheme } = useTheme();
   const { state, setProfile, setSettings, exportJSON, importState, loadDemo, resetAll } = useMarks();
   const fileRef = React.useRef<HTMLInputElement>(null);
+  const [open, setOpen] = React.useState(false);
   const [rulesOpen, setRulesOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
 
@@ -92,92 +117,130 @@ export function MoreMenu() {
     reader.readAsText(file);
   }
 
+  const themeOptions: { key: string; label: string; icon: LucideIcon }[] = [
+    { key: "light", label: "Light", icon: Sun },
+    { key: "dark", label: "Dark", icon: Moon },
+    { key: "system", label: "System", icon: SunMoon },
+  ];
+
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          aria-label="More options"
-          className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-9")}
-        >
-          <EllipsisVertical className="size-5" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-60">
-          <DropdownMenuItem onClick={() => setProfileOpen(true)}>
-            <User className="size-4" /> Your details
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel>Theme</DropdownMenuLabel>
-          <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-            <DropdownMenuRadioItem value="light">
-              <Sun className="size-4" /> Light
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="dark">
-              <Moon className="size-4" /> Dark
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="system">
-              <SunMoon className="size-4" /> System
-            </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="size-9"
+        aria-label="Menu"
+        onClick={() => setOpen(true)}
+      >
+        <EllipsisVertical className="size-5" />
+      </Button>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              downloadReport(state);
-              toast.success("PDF report downloaded");
-            }}
-          >
-            <Download className="size-4" /> Download PDF report
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={async () => {
-              const url = `${window.location.origin}${BP}/?s=${encodeShare(state)}`;
-              try {
-                await navigator.clipboard.writeText(url);
-                toast.success("Share link copied to clipboard");
-              } catch {
-                toast.error("Couldn't copy — try again");
-              }
-            }}
-          >
-            <Share2 className="size-4" /> Share my results (link)
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={doExport}>
-            <Upload className="size-4" /> Export backup (JSON)
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => fileRef.current?.click()}>
-            <FolderInput className="size-4" /> Import backup
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              loadDemo();
-              toast.success("Demo data loaded");
-            }}
-          >
-            <Sparkles className="size-4" /> Load demo data
-          </DropdownMenuItem>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="bottom" className="mx-auto max-h-[88vh] max-w-md overflow-y-auto rounded-t-[18px]">
+          <SheetHeader>
+            <SheetTitle>Menu</SheetTitle>
+            <SheetDescription className="sr-only">Settings, data and tools</SheetDescription>
+          </SheetHeader>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => window.open(HANDBOOK_URL, "_blank", "noopener,noreferrer")}
-          >
-            <FileText className="size-4" /> Read the handbook (PDF)
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setRulesOpen(true)}>
-            <BookOpen className="size-4" /> Rules &amp; settings
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            onClick={() => {
-              if (confirm("Erase all data on this device and start over?")) {
-                resetAll();
-                toast.success("Data cleared");
-              }
-            }}
-          >
-            <RotateCcw className="size-4" /> Reset all data
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <div className="space-y-1 px-4 pb-6">
+            <p className="mb-1.5 px-1 text-xs font-medium text-muted-foreground">Theme</p>
+            <div className="mb-2 grid grid-cols-3 gap-2">
+              {themeOptions.map((o) => {
+                const Icon = o.icon;
+                const active = theme === o.key;
+                return (
+                  <button
+                    key={o.key}
+                    type="button"
+                    onClick={() => setTheme(o.key)}
+                    aria-pressed={active}
+                    className={cn(
+                      "flex flex-col items-center gap-1 rounded-lg border py-2.5 text-xs font-medium transition-colors",
+                      active
+                        ? "border-brand bg-brand/10 text-brand"
+                        : "border-border text-muted-foreground hover:bg-muted",
+                    )}
+                  >
+                    <Icon className="size-4" />
+                    {o.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <Separator className="my-2" />
+
+            <MenuRow icon={User} onClick={() => { setOpen(false); setProfileOpen(true); }}>
+              Your details
+            </MenuRow>
+            <MenuRow
+              icon={Download}
+              onClick={() => {
+                downloadReport(state);
+                toast.success("PDF report downloaded");
+                setOpen(false);
+              }}
+            >
+              Download PDF report
+            </MenuRow>
+            <MenuRow
+              icon={Share2}
+              onClick={async () => {
+                const url = `${window.location.origin}${BP}/?s=${encodeShare(state)}`;
+                try {
+                  await navigator.clipboard.writeText(url);
+                  toast.success("Share link copied to clipboard");
+                } catch {
+                  toast.error("Couldn't copy — try again");
+                }
+              }}
+            >
+              Share my results (link)
+            </MenuRow>
+            <MenuRow icon={Upload} onClick={doExport}>
+              Export backup (JSON)
+            </MenuRow>
+            <MenuRow icon={FolderInput} onClick={() => fileRef.current?.click()}>
+              Import backup
+            </MenuRow>
+            <MenuRow
+              icon={Sparkles}
+              onClick={() => {
+                loadDemo();
+                toast.success("Demo data loaded");
+                setOpen(false);
+              }}
+            >
+              Load demo data
+            </MenuRow>
+
+            <Separator className="my-2" />
+
+            <MenuRow
+              icon={FileText}
+              onClick={() => window.open(HANDBOOK_URL, "_blank", "noopener,noreferrer")}
+            >
+              Read the handbook (PDF)
+            </MenuRow>
+            <MenuRow icon={BookOpen} onClick={() => { setOpen(false); setRulesOpen(true); }}>
+              Rules &amp; settings
+            </MenuRow>
+            <MenuRow
+              icon={RotateCcw}
+              destructive
+              onClick={() => {
+                if (confirm("Erase all data on this device and start over?")) {
+                  resetAll();
+                  toast.success("Data cleared");
+                  setOpen(false);
+                }
+              }}
+            >
+              Reset all data
+            </MenuRow>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <input
         ref={fileRef}
@@ -218,9 +281,7 @@ export function MoreMenu() {
 
           <div className="mt-2 grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="t-mod" className="text-xs">
-                Module pass
-              </Label>
+              <Label htmlFor="t-mod" className="text-xs">Module pass</Label>
               <Input
                 id="t-mod"
                 type="number"
@@ -234,9 +295,7 @@ export function MoreMenu() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="t-avg" className="text-xs">
-                Annual avg
-              </Label>
+              <Label htmlFor="t-avg" className="text-xs">Annual avg</Label>
               <Input
                 id="t-avg"
                 type="number"
@@ -250,9 +309,7 @@ export function MoreMenu() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="t-dis" className="text-xs">
-                Thesis pass
-              </Label>
+              <Label htmlFor="t-dis" className="text-xs">Thesis pass</Label>
               <Input
                 id="t-dis"
                 type="number"

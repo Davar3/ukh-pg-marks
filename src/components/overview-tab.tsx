@@ -15,7 +15,6 @@ import { ModuleBarChart } from "./module-bar-chart";
 import { ResitPlanner } from "./resit-planner";
 import { StatusLegend } from "./status-legend";
 import { StatusRing } from "./status-ring";
-import { TargetCalculator } from "./target-calculator";
 import { VerdictBanner } from "./verdict-banner";
 import { WhatToDo } from "./what-to-do";
 
@@ -53,7 +52,6 @@ export function OverviewTab() {
       <VerdictBanner assessment={a} />
       <MetricTiles assessment={a} />
       <WhatToDo advice={advice} />
-      <TargetCalculator />
       <StatusLegend />
 
       <Accordion>
@@ -75,7 +73,7 @@ export function OverviewTab() {
             <p className="text-sm text-muted-foreground">{a.detail}</p>
             <p className="mt-2 text-xs text-muted-foreground">
               Module pass 60 · annual average {a.reqAvg} · re-sit to raise the average is capped at
-              50% of modules (§5).
+              50% of modules.
             </p>
           </AccordionContent>
         </AccordionItem>

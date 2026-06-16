@@ -2,10 +2,10 @@
  * rules.ts — UKH Postgraduate progression rules engine (pure, no React/DOM).
  *
  * Grounded in the official "Student Handbook 2025-2026 — Postgraduate Programmes":
- *   §4.2 rounding + cumulative weights (Coursework 66.67%, Dissertation 33.33%)
- *   §5   module pass 60, dissertation pass 70, annual average 70, re-sit rules
- *   §6   thesis components (Written 30 / Oral 20 / Manuscript 40 / Supervisor 10)
- *   §7   re-sit covers exam areas; coursework not altered
+ *   - rounding + cumulative weights (Coursework 66.67%, Dissertation 33.33%)
+ *   - module pass 60, dissertation pass 70, annual average 70, re-sit rules
+ *   - thesis components (Written 30 / Oral 20 / Manuscript 40 / Supervisor 10)
+ *   - re-sit covers exam areas; coursework not altered
  *
  * This logic was verified against worked examples before porting from JS.
  */
@@ -41,14 +41,14 @@ function clamp(n: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, n));
 }
 
-/** §4.2: module marks round to nearest whole number, x.5 rounds up. */
+/** Module marks round to nearest whole number, x.5 rounds up. */
 export function roundMark(v: unknown): number | null {
   const n = num(v);
   if (n === null) return null;
   return Math.round(clamp(n, 0, 100));
 }
 
-/** §5.v: a re-sit mark is the FINAL mark (higher or lower) so it always wins. */
+/** A re-sit mark is the FINAL mark (higher or lower) so it always wins. */
 export function effectiveMark(m: Module): number | null {
   const resit = num(m.resit);
   const base = resit !== null ? resit : num(m.mark);
@@ -110,7 +110,7 @@ export function semesterAverage(semester: Semester | undefined): AverageResult {
   return average(semester ? semester.modules : []);
 }
 
-/** §5 taught-year progression assessment. */
+/** Taught-year progression assessment. */
 export function assessTaughtYear(
   year: TaughtYear,
   settings: Settings = DEFAULT_SETTINGS,
@@ -125,7 +125,7 @@ export function assessTaughtYear(
     return em !== null && em < pass;
   });
 
-  // §5.ii: re-sit to raise the average is capped at 50% of modules.
+  // Re-sit to raise the average is capped at 50% of modules.
   const maxResitForAverage = Math.floor(mods.length / 2);
 
   let status: TaughtAssessment["status"];
@@ -147,17 +147,17 @@ export function assessTaughtYear(
     status = "module-fail";
     tone = "fail";
     headline = "Automatic re-sit required";
-    detail = `${failed.length} module${failed.length > 1 ? "s are" : " is"} below ${pass}. Failed modules are re-sat automatically (no limit, §5.i). A failed academic year means termination — there is no retake in PG (§5.iii).`;
+    detail = `${failed.length} module${failed.length > 1 ? "s are" : " is"} below ${pass}. Failed modules are re-sat automatically (no limit). A failed academic year means termination — there is no retake in PG.`;
   } else if (avg.average !== null && avg.average < reqAvg) {
     status = "avg-below";
     tone = "warn";
     headline = `All modules passed, but average is below ${reqAvg}`;
-    detail = `You may request a re-sit on up to ${maxResitForAverage} module${maxResitForAverage === 1 ? "" : "s"} (max 50% of modules) to raise the average (§5.ii). This is NOT automatic — submit the PG Re-sit Request form to ARO. If the average is still below ${reqAvg} afterwards, the year is failed. A re-sit mark is final even if it is lower (§5.v).`;
+    detail = `You may request a re-sit on up to ${maxResitForAverage} module${maxResitForAverage === 1 ? "" : "s"} (max 50% of modules) to raise the average. This is NOT automatic — submit the PG Re-sit Request form to ARO. If the average is still below ${reqAvg} afterwards, the year is failed. A re-sit mark is final even if it is lower.`;
   } else {
     status = "pass";
     tone = "pass";
     headline = "On track — eligible to progress";
-    detail = `All modules are passed and the annual average is at or above ${reqAvg} (§5).`;
+    detail = `All modules are passed and the annual average is at or above ${reqAvg}.`;
   }
 
   return {
@@ -176,7 +176,7 @@ export function assessTaughtYear(
   };
 }
 
-/** §6 thesis assessment. */
+/** Thesis assessment. */
 export function assessThesis(
   year: ThesisYear,
   settings: Settings = DEFAULT_SETTINGS,
@@ -228,7 +228,7 @@ export function assessThesis(
   return { status, tone, headline, mark, reqPass, allMarked, weightSum };
 }
 
-/** §4.2 cumulative degree average: coursework 66.67% + dissertation 33.33%. */
+/** Cumulative degree average: coursework 66.67% + dissertation 33.33%. */
 export function cumulative(state: AppState): CumulativeResult {
   const settings = state.settings ?? DEFAULT_SETTINGS;
   const cwWeight = settings.courseworkWeight ?? DEFAULT_SETTINGS.courseworkWeight;

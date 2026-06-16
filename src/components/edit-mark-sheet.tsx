@@ -35,33 +35,33 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
   const pass = state.settings.modulePass;
   const markVal = mod ? num(mod.mark) : null;
   const resitVal = mod ? num(mod.resit) : null;
-
   const belowPass = markVal !== null && markVal < pass && resitVal === null;
   const hasResit = resitVal !== null;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="mx-auto max-w-md rounded-t-[18px]">
+      <SheetContent side="bottom" className="mx-auto max-w-md rounded-t-[20px]">
         <SheetHeader>
           <SheetTitle>Edit module</SheetTitle>
-          <SheetDescription>Leave a mark blank if it hasn’t been released yet.</SheetDescription>
+          <SheetDescription>Leave the mark blank if it hasn’t been released yet.</SheetDescription>
         </SheetHeader>
 
         {mod && (
-          <div className="flex flex-col gap-4 px-4">
+          <div className="flex flex-col gap-5 px-4 pb-1">
             <div className="space-y-1.5">
-              <Label htmlFor="m-name">Class / module name</Label>
+              <Label htmlFor="m-name">Class name</Label>
               <Input
                 id="m-name"
+                className="h-11"
                 value={mod.name}
                 placeholder="e.g. Research Methods"
                 onChange={(e) => updateModule(mod.id, { name: e.target.value })}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="m-mark">Mark</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="m-mark">Mark</Label>
+              <div className="flex items-center gap-3">
                 <Input
                   id="m-mark"
                   type="number"
@@ -71,14 +71,18 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                   step={0.1}
                   value={mod.mark ?? ""}
                   placeholder="—"
-                  className="tnum"
+                  className="tnum h-14 text-center text-2xl font-medium"
                   onChange={(e) => updateModule(mod.id, { mark: num(e.target.value) })}
                 />
+                <span className="text-lg text-muted-foreground">/ 100</span>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="m-resit">
-                  Re-sit <span className="font-normal text-muted-foreground">(optional)</span>
-                </Label>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="m-resit">
+                Re-sit mark <span className="font-normal text-muted-foreground">(optional)</span>
+              </Label>
+              <div className="flex items-center gap-3">
                 <Input
                   id="m-resit"
                   type="number"
@@ -88,10 +92,14 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                   step={0.1}
                   value={mod.resit ?? ""}
                   placeholder="—"
-                  className="tnum border-dashed"
+                  className="tnum h-11 border-dashed"
                   onChange={(e) => updateModule(mod.id, { resit: num(e.target.value) })}
                 />
+                <span className="text-lg text-muted-foreground">/ 100</span>
               </div>
+              <p className="text-xs text-muted-foreground">
+                Only if you take a re-sit exam — it replaces the mark above, even if it’s lower.
+              </p>
             </div>
 
             {belowPass && (
@@ -100,7 +108,7 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                 className="flex items-start gap-2 rounded-lg border border-fail/30 bg-fail/12 px-3 py-2 text-sm text-fail-strong"
               >
                 <RotateCcw className="mt-0.5 size-4 shrink-0" />
-                <span>Below {pass} → this module is re-sat automatically (no limit, §5.i).</span>
+                <span>Below {pass} → this module is re-sat automatically (no limit).</span>
               </div>
             )}
             {hasResit && (
@@ -109,13 +117,13 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                 className="flex items-start gap-2 rounded-lg border border-warn/30 bg-warn/12 px-3 py-2 text-sm text-warn-strong"
               >
                 <TriangleAlert className="mt-0.5 size-4 shrink-0" />
-                <span>A re-sit mark is final — it replaces the original even if it is lower (§5.v).</span>
+                <span>A re-sit mark is final — it replaces the original even if it is lower.</span>
               </div>
             )}
 
             <Button
               variant="ghost"
-              className="justify-start text-fail hover:bg-fail/10 hover:text-fail"
+              className="justify-start text-fail-strong hover:bg-fail/10 hover:text-fail-strong"
               onClick={() => {
                 deleteModule(mod.id);
                 toast.success("Module removed");

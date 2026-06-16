@@ -162,7 +162,7 @@ export function downloadReport(state: AppState) {
   // footer
   divider();
   text(
-    `Pass marks: module ${state.settings.modulePass}, annual average ${state.settings.annualAvg}, dissertation ${state.settings.dissertationPass} (§5). Generated from the UKH PG Handbook 2025–2026. A planning aid only — confirm all decisions with your department and the Academic Registrar's Office.`,
+    `Pass marks: module ${state.settings.modulePass}, annual average ${state.settings.annualAvg}, dissertation ${state.settings.dissertationPass}. Generated from the UKH PG Handbook 2025–2026. A planning aid only — confirm all decisions with your department and the Academic Registrar's Office.`,
     8,
     { color: MUTED },
   );
