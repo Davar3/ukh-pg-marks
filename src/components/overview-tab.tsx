@@ -12,6 +12,7 @@ import {
 import { DownloadReportButton } from "./download-report-button";
 import { MetricTiles } from "./metric-tiles";
 import { ModuleBarChart } from "./module-bar-chart";
+import { PendingOutlook } from "./pending-outlook";
 import { ResitPlanner } from "./resit-planner";
 import { StatusLegend } from "./status-legend";
 import { StatusRing } from "./status-ring";
@@ -51,6 +52,7 @@ export function OverviewTab() {
 
       <VerdictBanner assessment={a} />
       <MetricTiles assessment={a} />
+      <PendingOutlook />
       <WhatToDo advice={advice} />
       <StatusLegend />
 
