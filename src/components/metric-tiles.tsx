@@ -1,14 +1,13 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import type { TaughtAssessment } from "@/lib/types";
 
 function Tile({ value, label }: { value: string; label: string }) {
   return (
-    <Card className="gap-1 px-4 py-3">
+    <div className="flex flex-col gap-1 rounded-xl border border-border bg-card px-4 py-3">
       <span className="tnum text-2xl font-medium leading-none">{value}</span>
       <span className="text-xs text-muted-foreground">{label}</span>
-    </Card>
+    </div>
   );
 }
 

@@ -38,9 +38,9 @@ interface ToneClasses {
 }
 
 const TONE_CLASSES: Record<Tone, ToneClasses> = {
-  pass: { text: "text-pass", dot: "bg-pass", softBg: "bg-pass/10", border: "border-pass/30" },
-  warn: { text: "text-warn", dot: "bg-warn", softBg: "bg-warn/10", border: "border-warn/30" },
-  fail: { text: "text-fail", dot: "bg-fail", softBg: "bg-fail/10", border: "border-fail/30" },
+  pass: { text: "text-pass-strong", dot: "bg-pass", softBg: "bg-pass/12", border: "border-pass/30" },
+  warn: { text: "text-warn-strong", dot: "bg-warn", softBg: "bg-warn/12", border: "border-warn/30" },
+  fail: { text: "text-fail-strong", dot: "bg-fail", softBg: "bg-fail/12", border: "border-fail/30" },
   pending: {
     text: "text-muted-foreground",
     dot: "bg-pending",

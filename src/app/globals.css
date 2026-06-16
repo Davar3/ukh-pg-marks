@@ -46,6 +46,10 @@
   --color-warn: var(--warn);
   --color-fail: var(--fail);
   --color-pending: var(--pending);
+  /* higher-contrast text variants for tone text on soft backgrounds (WCAG AA) */
+  --color-pass-strong: var(--pass-strong);
+  --color-warn-strong: var(--warn-strong);
+  --color-fail-strong: var(--fail-strong);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -95,6 +99,9 @@
   --warn: #d97706;
   --fail: #dc2626;
   --pending: #64748b;
+  --pass-strong: #15803d;
+  --warn-strong: #b45309;
+  --fail-strong: #b91c1c;
 }
 
 .dark {
@@ -136,6 +143,9 @@
   --warn: #fbbf24;
   --fail: #f87171;
   --pending: #94a3b8;
+  --pass-strong: #4ade80;
+  --warn-strong: #fcd34d;
+  --fail-strong: #fca5a5;
 }
 
 @layer base {
@@ -158,6 +168,6 @@
 /* Print: hide the live app, show only the report. */
 @media print {
   .app-shell { display: none !important; }
-  .print-report { display: block !important; }
+  .print-report { display: block !important; color-scheme: light; }
   @page { margin: 16mm; }
 }

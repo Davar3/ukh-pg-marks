@@ -42,7 +42,7 @@ export function OverviewTab() {
           </span>
         )}
         {showOverride && (
-          <p className="text-center text-xs text-fail">
+          <p className="text-center text-xs text-fail-strong">
             Average looks fine, but a module is below {a.pass} — that still triggers a re-sit.
           </p>
         )}

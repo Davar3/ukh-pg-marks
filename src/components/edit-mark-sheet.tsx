@@ -72,16 +72,12 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                   value={mod.mark ?? ""}
                   placeholder="—"
                   className="tnum"
-                  onChange={(e) =>
-                    updateModule(mod.id, {
-                      mark: e.target.value === "" ? null : Number(e.target.value),
-                    })
-                  }
+                  onChange={(e) => updateModule(mod.id, { mark: num(e.target.value) })}
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="m-resit" className="text-muted-foreground">
-                  Re-sit <span className="font-normal">(optional)</span>
+                <Label htmlFor="m-resit">
+                  Re-sit <span className="font-normal text-muted-foreground">(optional)</span>
                 </Label>
                 <Input
                   id="m-resit"
@@ -93,23 +89,25 @@ export function EditMarkSheet({ moduleId, open, onOpenChange }: EditMarkSheetPro
                   value={mod.resit ?? ""}
                   placeholder="—"
                   className="tnum border-dashed"
-                  onChange={(e) =>
-                    updateModule(mod.id, {
-                      resit: e.target.value === "" ? null : Number(e.target.value),
-                    })
-                  }
+                  onChange={(e) => updateModule(mod.id, { resit: num(e.target.value) })}
                 />
               </div>
             </div>
 
             {belowPass && (
-              <div className="flex items-start gap-2 rounded-lg border border-fail/30 bg-fail/10 px-3 py-2 text-sm text-fail">
+              <div
+                role="status"
+                className="flex items-start gap-2 rounded-lg border border-fail/30 bg-fail/12 px-3 py-2 text-sm text-fail-strong"
+              >
                 <RotateCcw className="mt-0.5 size-4 shrink-0" />
                 <span>Below {pass} → this module is re-sat automatically (no limit, §5.i).</span>
               </div>
             )}
             {hasResit && (
-              <div className="flex items-start gap-2 rounded-lg border border-warn/30 bg-warn/10 px-3 py-2 text-sm text-warn">
+              <div
+                role="status"
+                className="flex items-start gap-2 rounded-lg border border-warn/30 bg-warn/12 px-3 py-2 text-sm text-warn-strong"
+              >
                 <TriangleAlert className="mt-0.5 size-4 shrink-0" />
                 <span>A re-sit mark is final — it replaces the original even if it is lower (§5.v).</span>
               </div>

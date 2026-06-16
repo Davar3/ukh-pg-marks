@@ -177,9 +177,13 @@ export function MoreMenu() {
               <Input
                 id="t-mod"
                 type="number"
+                min={0}
+                max={100}
                 className="tnum"
                 value={state.settings.modulePass}
-                onChange={(e) => setSettings({ modulePass: Number(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setSettings({ modulePass: Math.max(0, Math.min(100, Number(e.target.value) || 60)) })
+                }
               />
             </div>
             <div className="space-y-1.5">
@@ -189,9 +193,13 @@ export function MoreMenu() {
               <Input
                 id="t-avg"
                 type="number"
+                min={0}
+                max={100}
                 className="tnum"
                 value={state.settings.annualAvg}
-                onChange={(e) => setSettings({ annualAvg: Number(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setSettings({ annualAvg: Math.max(0, Math.min(100, Number(e.target.value) || 70)) })
+                }
               />
             </div>
             <div className="space-y-1.5">
@@ -201,9 +209,15 @@ export function MoreMenu() {
               <Input
                 id="t-dis"
                 type="number"
+                min={0}
+                max={100}
                 className="tnum"
                 value={state.settings.dissertationPass}
-                onChange={(e) => setSettings({ dissertationPass: Number(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setSettings({
+                    dissertationPass: Math.max(0, Math.min(100, Number(e.target.value) || 70)),
+                  })
+                }
               />
             </div>
           </div>

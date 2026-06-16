@@ -22,10 +22,15 @@ export function ModuleBarChart({ year }: { year: TaughtYear }) {
             {s.modules.map((m) => {
               const em = effectiveMark(m);
               const c = toneClasses(moduleTone(moduleStatus(m, state.settings)));
+              const label = m.name?.trim() || "Untitled module";
               return (
-                <div key={m.id} className="space-y-1">
+                <div
+                  key={m.id}
+                  className="space-y-1"
+                  aria-label={`${label}: ${em ?? "not graded"}${em !== null ? " out of 100" : ""}`}
+                >
                   <div className="flex justify-between text-xs">
-                    <span className="truncate">{m.name?.trim() || "Untitled module"}</span>
+                    <span className="truncate">{label}</span>
                     <span className="tnum font-medium">{em ?? "—"}</span>
                   </div>
                   <div className="relative h-2 rounded-full bg-muted">

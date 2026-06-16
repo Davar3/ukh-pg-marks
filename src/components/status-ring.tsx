@@ -58,6 +58,9 @@ export function StatusRing({
   }
 
   const big = centerLabel ?? (has ? (value as number).toFixed(1) : "—");
+  const ariaLabel = `${sub ?? "value"}: ${has ? `${big} out of 100` : "not available"}${
+    threshold != null ? `, target ${threshold}` : ""
+  }`;
 
   return (
     <svg
@@ -66,7 +69,7 @@ export function StatusRing({
       width={size}
       height={size}
       role="img"
-      aria-label={`${sub ?? "value"} ${big}`}
+      aria-label={ariaLabel}
     >
       <circle
         cx={cx}
