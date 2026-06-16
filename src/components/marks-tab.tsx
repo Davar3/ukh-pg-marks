@@ -30,12 +30,12 @@ export function MarksTab() {
         </TabsList>
 
         {taughtYear.semesters.map((s, i) => {
-          const avg = semesterAverage(s).average;
+          const sa = semesterAverage(s);
           return (
             <TabsContent key={i} value={String(i)} className="mt-3 space-y-2">
               <p className="px-1 text-xs text-muted-foreground">
                 {s.modules.length
-                  ? `Provisional average · ${avg !== null ? avg.toFixed(1) : "—"}`
+                  ? `${sa.graded}/${sa.total} graded · avg ${sa.average !== null ? sa.average.toFixed(1) : "—"}`
                   : "No modules yet"}
               </p>
 

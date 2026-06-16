@@ -1,4 +1,4 @@
-import { assessTaughtYear, effectiveMark, yearModules } from "./rules";
+import { assessTaughtYear, effectiveMark, num, yearModules } from "./rules";
 import type { Settings, TaughtAssessment, TaughtYear } from "./types";
 
 export interface Advice {
@@ -61,6 +61,11 @@ export function adviceForTaughtYear(year: TaughtYear, settings: Settings): Advic
 
     recs.push(
       `You passed every module, but your annual average (${fmt(a.average)}) is below ${req}. You may request a re-sit on up to ${a.maxResitForAverage} module${a.maxResitForAverage === 1 ? "" : "s"} (max 50% of modules) to raise it — not automatic; submit the PG Re-sit Request form to ARO (§5.ii).`,
+    );
+    const used = graded.filter((m) => num(m.resit) !== null).length;
+    const remaining = Math.max(0, a.maxResitForAverage - used);
+    recs.push(
+      `Re-sit allowance: ${used} entered of ${a.maxResitForAverage} allowed — ${remaining} remaining${remaining === 0 ? " (you've reached the 50% cap)" : ""}.`,
     );
     recs.push(
       `You need about ${Math.ceil(deficit)} more total mark-points across the year. Best candidates (your lowest passed modules): ${lowest

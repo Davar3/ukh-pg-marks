@@ -5,6 +5,7 @@ import {
   BookOpen,
   Download,
   EllipsisVertical,
+  FileText,
   FolderInput,
   Moon,
   RotateCcw,
@@ -12,10 +13,12 @@ import {
   Sun,
   SunMoon,
   Upload,
+  User,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { useMarks } from "@/hooks/use-marks";
+import { downloadReport } from "@/lib/pdf";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,6 +41,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
+const HANDBOOK_URL =
+  "https://www.ukh.edu.krd/wp-content/uploads/2025/12/Student-Handbook-2025-2026-PG.pdf";
+
 const RULES: string[] = [
   "Module pass = 60. Below 60 → automatic re-sit, no limit (§5.i).",
   "Annual average must be ≥ 70 to progress, and every module must be passed (§5).",
@@ -51,9 +57,10 @@ const RULES: string[] = [
 
 export function MoreMenu() {
   const { theme, setTheme } = useTheme();
-  const { state, setSettings, exportJSON, importState, loadDemo, resetAll } = useMarks();
+  const { state, setProfile, setSettings, exportJSON, importState, loadDemo, resetAll } = useMarks();
   const fileRef = React.useRef<HTMLInputElement>(null);
   const [rulesOpen, setRulesOpen] = React.useState(false);
+  const [profileOpen, setProfileOpen] = React.useState(false);
 
   function doExport() {
     const blob = new Blob([exportJSON()], { type: "application/json" });
@@ -91,6 +98,10 @@ export function MoreMenu() {
           <EllipsisVertical className="size-5" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-60">
+          <DropdownMenuItem onClick={() => setProfileOpen(true)}>
+            <User className="size-4" /> Your details
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuLabel>Theme</DropdownMenuLabel>
           <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
             <DropdownMenuRadioItem value="light">
@@ -105,7 +116,12 @@ export function MoreMenu() {
           </DropdownMenuRadioGroup>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => window.print()}>
+          <DropdownMenuItem
+            onClick={() => {
+              downloadReport(state);
+              toast.success("PDF report downloaded");
+            }}
+          >
             <Download className="size-4" /> Download PDF report
           </DropdownMenuItem>
           <DropdownMenuItem onClick={doExport}>
@@ -124,6 +140,11 @@ export function MoreMenu() {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => window.open(HANDBOOK_URL, "_blank", "noopener,noreferrer")}
+          >
+            <FileText className="size-4" /> Read the handbook (PDF)
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setRulesOpen(true)}>
             <BookOpen className="size-4" /> Rules &amp; settings
           </DropdownMenuItem>
@@ -168,6 +189,15 @@ export function MoreMenu() {
               <li key={i}>{r}</li>
             ))}
           </ul>
+
+          <a
+            href={HANDBOOK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-brand underline underline-offset-4"
+          >
+            <FileText className="size-4" /> Read the full handbook (PDF)
+          </a>
 
           <div className="mt-2 grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
@@ -226,6 +256,37 @@ export function MoreMenu() {
             A planning aid only — confirm decisions with your department and the Academic Registrar’s
             Office. Your data stays in this browser.
           </p>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Your details</DialogTitle>
+            <DialogDescription>
+              Shown on your downloaded PDF report. Stored only on this device.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="p-name">Name</Label>
+              <Input
+                id="p-name"
+                value={state.profile.student}
+                placeholder="Your name"
+                onChange={(e) => setProfile({ student: e.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="p-dep">Department / programme</Label>
+              <Input
+                id="p-dep"
+                value={state.profile.department}
+                placeholder="e.g. MSc Computer Science"
+                onChange={(e) => setProfile({ department: e.target.value })}
+              />
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </>

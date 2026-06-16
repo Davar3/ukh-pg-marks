@@ -165,9 +165,3 @@
   }
 }
 
-/* Print: hide the live app, show only the report. */
-@media print {
-  .app-shell { display: none !important; }
-  .print-report { display: block !important; color-scheme: light; }
-  @page { margin: 16mm; }
-}

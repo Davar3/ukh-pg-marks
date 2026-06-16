@@ -5,7 +5,6 @@ import { AppHeader } from "@/components/app-header";
 import { BottomTabBar, type TabKey } from "@/components/bottom-tab-bar";
 import { MarksTab } from "@/components/marks-tab";
 import { OverviewTab } from "@/components/overview-tab";
-import { PrintReport } from "@/components/print-report";
 import { ThesisTab } from "@/components/thesis-tab";
 import { MarksProvider } from "@/hooks/use-marks";
 
@@ -40,7 +39,6 @@ export default function Home() {
         </main>
         <BottomTabBar active={tab} onChange={setTab} />
       </div>
-      <PrintReport />
     </MarksProvider>
   );
 }

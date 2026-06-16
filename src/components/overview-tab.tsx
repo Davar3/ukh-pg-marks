@@ -14,6 +14,7 @@ import { MetricTiles } from "./metric-tiles";
 import { ModuleBarChart } from "./module-bar-chart";
 import { StatusLegend } from "./status-legend";
 import { StatusRing } from "./status-ring";
+import { TargetCalculator } from "./target-calculator";
 import { VerdictBanner } from "./verdict-banner";
 import { WhatToDo } from "./what-to-do";
 
@@ -51,6 +52,7 @@ export function OverviewTab() {
       <VerdictBanner assessment={a} />
       <MetricTiles assessment={a} />
       <WhatToDo advice={advice} />
+      <TargetCalculator />
       <StatusLegend />
 
       <Accordion>
