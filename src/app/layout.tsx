@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
 const bp = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const metadata: Metadata = {
-  title: "UKH PG Marks",
+  title: "Am I Passing?",
   description:
-    "Track and visualise your UKH postgraduate marks against the handbook progression rules. Works offline; your data stays in your browser.",
+    "Track your UKH postgraduate marks and instantly see if you're passing, against the handbook progression rules. Works offline; your data stays in your browser.",
   manifest: `${bp}/manifest.webmanifest`,
-  appleWebApp: { capable: true, title: "UKH Marks", statusBarStyle: "default" },
+  appleWebApp: { capable: true, title: "Am I Passing?", statusBarStyle: "default" },
   icons: { icon: `${bp}/icon.svg`, apple: `${bp}/icon-180.png` },
 };
 

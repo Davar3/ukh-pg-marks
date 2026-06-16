@@ -1,7 +1,7 @@
-# UKH PG Marks
+# Am I Passing?
 
 A mobile-first web app that helps **University of Kurdistan Hewlêr** postgraduate students record
-their module marks and instantly understand where they stand against the official progression rules
+their module marks and instantly see whether they're passing, against the official progression rules
 in the **PG Student Handbook 2025–2026**.
 
 It’s an installable, offline-capable PWA. **All data stays in your browser** (localStorage) — there is

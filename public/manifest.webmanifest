@@ -1,7 +1,7 @@
 {
-  "name": "UKH PG Marks",
-  "short_name": "UKH Marks",
-  "description": "Track and visualise your UKH postgraduate marks against the handbook progression rules. Works offline; your data stays in your browser.",
+  "name": "Am I Passing?",
+  "short_name": "Am I Passing?",
+  "description": "Track your UKH postgraduate marks and instantly see if you're passing, against the handbook progression rules. Works offline; your data stays in your browser.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
