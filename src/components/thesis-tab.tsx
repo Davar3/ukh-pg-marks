@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { StatusRing } from "./status-ring";
 
 export function ThesisTab() {
-  const { state, thesisYear, updateThesisComponent } = useMarks();
+  const { state, thesisYear, setThesisMark } = useMarks();
   if (!thesisYear) return null;
 
   const t = assessThesis(thesisYear, state.settings);
@@ -27,38 +27,38 @@ export function ThesisTab() {
         <AccordionItem value="thesis">
           <AccordionTrigger>Year 2 · Thesis</AccordionTrigger>
           <AccordionContent className="space-y-4">
-            <div className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4">
+            <div className="flex flex-col items-center rounded-xl border border-border bg-card p-4">
               <StatusRing
                 value={t.mark}
                 tone={t.tone}
                 threshold={t.reqPass}
                 sub={`thesis / need ${t.reqPass}`}
-                pending={t.status === "pending" || t.status === "empty"}
+                pending={t.status === "empty"}
                 size={140}
               />
-              <p className="text-center text-xs text-muted-foreground">
-                Weighted: Written 30 · Oral 20 · Manuscript 40 · Supervisor 10.
-              </p>
             </div>
 
-            {thesisYear.thesis.components.map((c, i) => (
-              <div key={i} className="flex items-center justify-between gap-3">
-                <Label className="text-sm">
-                  {c.name} <span className="text-muted-foreground">· {c.weight}%</span>
-                </Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="thesis-mark">Thesis mark</Label>
+              <div className="flex items-center gap-3">
                 <Input
+                  id="thesis-mark"
                   type="number"
                   inputMode="numeric"
                   min={0}
                   max={100}
                   step={0.1}
-                  value={c.mark ?? ""}
+                  value={thesisYear.thesis.mark ?? ""}
                   placeholder="—"
-                  className="tnum w-24"
-                  onChange={(e) => updateThesisComponent(i, { mark: num(e.target.value) })}
+                  className="tnum h-14 text-center text-2xl font-medium"
+                  onChange={(e) => setThesisMark(num(e.target.value))}
                 />
+                <span className="text-lg text-muted-foreground">/ 100</span>
               </div>
-            ))}
+              <p className="text-xs text-muted-foreground">
+                Your overall dissertation mark. The pass mark is {t.reqPass}.
+              </p>
+            </div>
           </AccordionContent>
         </AccordionItem>
 

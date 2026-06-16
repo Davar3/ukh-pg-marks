@@ -32,12 +32,6 @@ export interface Semester {
   modules: Module[];
 }
 
-export interface ThesisComponent {
-  name: string;
-  weight: number;
-  mark: number | null;
-}
-
 export interface TaughtYear {
   name: string;
   type: "taught";
@@ -47,7 +41,7 @@ export interface TaughtYear {
 export interface ThesisYear {
   name: string;
   type: "thesis";
-  thesis: { components: ThesisComponent[] };
+  thesis: { mark: number | null };
 }
 
 export type Year = TaughtYear | ThesisYear;
@@ -89,13 +83,11 @@ export interface TaughtAssessment {
 }
 
 export interface ThesisAssessment {
-  status: "empty" | "pending" | "pass" | "fail";
+  status: "empty" | "pass" | "fail";
   tone: Tone;
   headline: string;
   mark: number | null;
   reqPass: number;
-  allMarked: boolean;
-  weightSum: number;
 }
 
 export interface CumulativeResult {

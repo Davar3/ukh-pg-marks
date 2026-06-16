@@ -7,7 +7,6 @@ import type {
   Profile,
   Settings,
   TaughtYear,
-  ThesisComponent,
   ThesisYear,
 } from "@/lib/types";
 import {
@@ -32,7 +31,7 @@ interface MarksContextValue {
   deleteModule: (id: string) => void;
   setSemesterName: (yearIndex: number, semIndex: number, name: string) => void;
   setYearName: (yearIndex: number, name: string) => void;
-  updateThesisComponent: (index: number, patch: Partial<ThesisComponent>) => void;
+  setThesisMark: (mark: number | null) => void;
   resetAll: () => void;
   loadDemo: () => void;
   importState: (raw: string) => void;
@@ -110,10 +109,10 @@ export function MarksProvider({
           if (y.type === "taught") y.semesters[si].name = name;
         }),
       setYearName: (yi, name) => mutate((s) => { s.years[yi].name = name; }),
-      updateThesisComponent: (index, patch) =>
+      setThesisMark: (mark) =>
         mutate((s) => {
           const y = s.years.find((yy): yy is ThesisYear => yy.type === "thesis");
-          if (y) Object.assign(y.thesis.components[index], patch);
+          if (y) y.thesis.mark = mark;
         }),
       resetAll: () => setState(defaultState()),
       loadDemo: () => setState(demoState()),

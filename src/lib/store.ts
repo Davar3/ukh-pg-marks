@@ -45,14 +45,7 @@ export function defaultState(): AppState {
       {
         name: "Year 2",
         type: "thesis",
-        thesis: {
-          components: [
-            { name: "Written Test", weight: 30, mark: null },
-            { name: "Oral Examination", weight: 20, mark: null },
-            { name: "Manuscript", weight: 40, mark: null },
-            { name: "Supervisor's Assessment", weight: 10, mark: null },
-          ],
-        },
+        thesis: { mark: null },
       },
     ],
   };
@@ -92,6 +85,10 @@ export function migrate(state: unknown): AppState {
           if (m.credits == null) m.credits = 1;
         });
       });
+    } else if (y.type === "thesis") {
+      // normalise old component-based saves to a single thesis mark
+      const m = y.thesis && typeof y.thesis.mark === "number" ? y.thesis.mark : null;
+      y.thesis = { mark: m };
     }
   });
   return merged;

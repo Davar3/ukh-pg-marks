@@ -4,7 +4,7 @@
  * Grounded in the official "Student Handbook 2025-2026 — Postgraduate Programmes":
  *   - rounding + cumulative weights (Coursework 66.67%, Dissertation 33.33%)
  *   - module pass 60, dissertation pass 70, annual average 70, re-sit rules
- *   - thesis components (Written 30 / Oral 20 / Manuscript 40 / Supervisor 10)
+ *   - thesis: single overall mark, pass at 70
  *   - re-sit covers exam areas; coursework not altered
  *
  * This logic was verified against worked examples before porting from JS.
@@ -176,46 +176,23 @@ export function assessTaughtYear(
   };
 }
 
-/** Thesis assessment. */
+/** Thesis assessment — a single overall mark out of 100. */
 export function assessThesis(
   year: ThesisYear,
   settings: Settings = DEFAULT_SETTINGS,
 ): ThesisAssessment {
   const reqPass = settings.dissertationPass ?? DEFAULT_SETTINGS.dissertationPass;
-  const comps = year?.thesis?.components ?? [];
-
-  let weightSum = 0;
-  let weightedSum = 0;
-  let anyMark = false;
-  let allMarked = comps.length > 0;
-
-  for (const c of comps) {
-    const w = num(c.weight) ?? 0;
-    weightSum += w;
-    const mk = num(c.mark);
-    if (mk === null) {
-      allMarked = false;
-      continue;
-    }
-    anyMark = true;
-    weightedSum += mk * w;
-  }
-
-  const mark = allMarked && weightSum > 0 ? weightedSum / weightSum : null;
+  const mark = roundMark(year?.thesis?.mark);
 
   let status: ThesisAssessment["status"];
   let tone: ThesisAssessment["tone"];
   let headline: string;
 
-  if (!anyMark && !allMarked) {
+  if (mark === null) {
     status = "empty";
     tone = "neutral";
     headline = "Thesis not assessed yet";
-  } else if (!allMarked) {
-    status = "pending";
-    tone = "pending";
-    headline = "Thesis partially assessed";
-  } else if (mark !== null && mark >= reqPass) {
+  } else if (mark >= reqPass) {
     status = "pass";
     tone = "pass";
     headline = "Thesis passed";
@@ -225,7 +202,7 @@ export function assessThesis(
     headline = `Thesis below the ${reqPass} pass mark`;
   }
 
-  return { status, tone, headline, mark, reqPass, allMarked, weightSum };
+  return { status, tone, headline, mark, reqPass };
 }
 
 /** Cumulative degree average: coursework 66.67% + dissertation 33.33%. */
