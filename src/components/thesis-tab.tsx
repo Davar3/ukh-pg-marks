@@ -1,6 +1,6 @@
 "use client";
 
-import { Award, Lock } from "lucide-react";
+import { Award } from "lucide-react";
 import { useMarks } from "@/hooks/use-marks";
 import { assessThesis, cumulative, num } from "@/lib/rules";
 import {
@@ -23,14 +23,6 @@ export function ThesisTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-        <Lock className="mt-0.5 size-4 shrink-0" />
-        <p>
-          Year 2 is the thesis year. You’re in Year 1 right now — this is here for later. Come back
-          and fill it in once you start your dissertation.
-        </p>
-      </div>
-
       <Accordion>
         <AccordionItem value="thesis">
           <AccordionTrigger>Year 2 · Thesis</AccordionTrigger>
