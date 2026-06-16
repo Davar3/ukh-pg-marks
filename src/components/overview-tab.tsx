@@ -12,6 +12,7 @@ import {
 import { DownloadReportButton } from "./download-report-button";
 import { MetricTiles } from "./metric-tiles";
 import { ModuleBarChart } from "./module-bar-chart";
+import { ResitPlanner } from "./resit-planner";
 import { StatusLegend } from "./status-legend";
 import { StatusRing } from "./status-ring";
 import { TargetCalculator } from "./target-calculator";
@@ -56,6 +57,12 @@ export function OverviewTab() {
       <StatusLegend />
 
       <Accordion>
+        <AccordionItem value="planner">
+          <AccordionTrigger>Re-sit planner (what-if)</AccordionTrigger>
+          <AccordionContent>
+            <ResitPlanner />
+          </AccordionContent>
+        </AccordionItem>
         <AccordionItem value="chart">
           <AccordionTrigger>Module breakdown</AccordionTrigger>
           <AccordionContent>

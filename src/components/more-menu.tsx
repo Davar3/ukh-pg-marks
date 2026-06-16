@@ -9,6 +9,7 @@ import {
   FolderInput,
   Moon,
   RotateCcw,
+  Share2,
   Sparkles,
   Sun,
   SunMoon,
@@ -19,6 +20,9 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { useMarks } from "@/hooks/use-marks";
 import { downloadReport } from "@/lib/pdf";
+import { encodeShare } from "@/lib/store";
+
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -123,6 +127,19 @@ export function MoreMenu() {
             }}
           >
             <Download className="size-4" /> Download PDF report
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              const url = `${window.location.origin}${BP}/?s=${encodeShare(state)}`;
+              try {
+                await navigator.clipboard.writeText(url);
+                toast.success("Share link copied to clipboard");
+              } catch {
+                toast.error("Couldn't copy — try again");
+              }
+            }}
+          >
+            <Share2 className="size-4" /> Share my results (link)
           </DropdownMenuItem>
           <DropdownMenuItem onClick={doExport}>
             <Upload className="size-4" /> Export backup (JSON)

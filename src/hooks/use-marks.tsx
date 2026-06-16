@@ -41,20 +41,28 @@ interface MarksContextValue {
 
 const MarksContext = React.createContext<MarksContextValue | null>(null);
 
-export function MarksProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = React.useState<AppState>(() => defaultState());
-  const [hydrated, setHydrated] = React.useState(false);
+export function MarksProvider({
+  children,
+  initialState,
+}: {
+  children: React.ReactNode;
+  /** when provided (e.g. a shared snapshot) the provider is read-only: no localStorage load/save */
+  initialState?: AppState;
+}) {
+  const [state, setState] = React.useState<AppState>(() => initialState ?? defaultState());
+  const [hydrated, setHydrated] = React.useState(!!initialState);
 
   // Load real data on the client only (keeps SSR/first render deterministic).
   React.useEffect(() => {
+    if (initialState) return; // shared/read-only view — leave the user's own data untouched
     setState(load());
     setHydrated(true);
-  }, []);
+  }, [initialState]);
 
-  // Autosave once hydrated.
+  // Autosave once hydrated (never for a shared snapshot).
   React.useEffect(() => {
-    if (hydrated) save(state);
-  }, [state, hydrated]);
+    if (hydrated && !initialState) save(state);
+  }, [state, hydrated, initialState]);
 
   const mutate = React.useCallback((fn: (draft: AppState) => void) => {
     setState((prev) => {

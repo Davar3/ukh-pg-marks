@@ -133,3 +133,16 @@ export function exportJSON(state: AppState): string {
 export function importJSON(text: string): AppState {
   return migrate(JSON.parse(text));
 }
+
+// ---- shareable read-only links (state encoded in the URL, base64url) ----
+export function encodeShare(state: AppState): string {
+  return btoa(encodeURIComponent(JSON.stringify(state)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+export function decodeShare(s: string): AppState {
+  const b64 = s.replace(/-/g, "+").replace(/_/g, "/");
+  return migrate(JSON.parse(decodeURIComponent(atob(b64))));
+}
