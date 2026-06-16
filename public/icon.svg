@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="UKH PG Marks">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a73b0"/>
+      <stop offset="1" stop-color="#0f4d7e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <!-- bar-chart motif -->
+  <g fill="#ffffff" opacity="0.95">
+    <rect x="118" y="250" width="46" height="120" rx="12"/>
+    <rect x="190" y="206" width="46" height="164" rx="12"/>
+    <rect x="262" y="166" width="46" height="204" rx="12"/>
+    <rect x="334" y="126" width="46" height="244" rx="12"/>
+  </g>
+  <!-- pass-line at 70 -->
+  <line x1="100" y1="196" x2="400" y2="196" stroke="#9ad0f5" stroke-width="8" stroke-dasharray="18 14" stroke-linecap="round"/>
+  <text x="256" y="436" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="74" font-weight="800" fill="#ffffff" letter-spacing="4">UKH</text>
+</svg>
